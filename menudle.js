@@ -23,17 +23,6 @@ function textWrap(str, width) {
 	return str;
 }
 
-function renderText(input, options) {
-
-	var tabReplacement = S(' ').repeat(options.tabSize).s;
-	input = input.replace(/\t/g, tabReplacement);
-
-	return textWrap(input, options.wrapAt).split('\n').map(function(line) {
-		return 'i' + line + '\tnull\t(FALSE)\t0';
-	}).join(ENDLINE);
-
-}
-
 function render(input, options) {
 
 	options = _.assign({}, defaultOptions, options);
@@ -49,16 +38,47 @@ function render(input, options) {
 
 		var isCommand = (line[0] == ':') && (line[1] != ':');
 		if (!isCommand) {
+
 			if (line[1] == ':')
-				result.push(renderText(line.substr(1), options));
+				result.push(render.text(line.substr(1), options));
 			else
-				result.push(renderText(line, options));
+				result.push(render.text(line, options));
+
+		} else {
+
+			var command = line.substr(1).split(/\s+/, 1)[0].toLowerCase();
+			input = input.substr(command.length + 2);
+			if (!render[command])
+				result.push(render.text('Unknown command ' + command, options));
+			else
+				result.push(render[command](input, options));
+
 		}
 
 	});
 
 	return result.join(ENDLINE);
 
+}
+
+render.text = function(input, options) {
+	var tabReplacement = S(' ').repeat(options.tabSize).s;
+	input = input.replace(/\t/g, tabReplacement);
+	return textWrap(input, options.wrapAt).split('\n').map(function(line) {
+		return 'i' + line + '\tnull\t(FALSE)\t0';
+	}).join(ENDLINE);
+}
+
+render.underline = function(input, options) {
+	return render.text(input, options) +
+		ENDLINE +
+		render.text(S('-').repeat(input.length).s, options);
+}
+
+render.dblunderline = function(input, options) {
+	return render.text(input, options) +
+		ENDLINE +
+		render.text(S('=').repeat(input.length).s, options);
 }
 
 module.exports = {

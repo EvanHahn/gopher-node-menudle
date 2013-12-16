@@ -71,6 +71,28 @@ describe('menudle', function() {
 
 		});
 
+		describe('simple text commands', function() {
+
+			it('should underline text', function() {
+				var input = ':underline San Diago';
+				var result = menudle.render(input);
+				var lines = S(result).lines();
+				lines.should.have.length(2);
+				lines[0].should.eql('iSan Diago\tnull\t(FALSE)\t0');
+				lines[1].should.eql('i---------\tnull\t(FALSE)\t0');
+			});
+
+			it('should double-underline text', function() {
+				var input = ':dblunderline San Diago';
+				var result = menudle.render(input);
+				var lines = S(result).lines();
+				lines.should.have.length(2);
+				lines[0].should.eql('iSan Diago\tnull\t(FALSE)\t0');
+				lines[1].should.eql('i=========\tnull\t(FALSE)\t0');
+			});
+
+		});
+
 	});
 
 });
