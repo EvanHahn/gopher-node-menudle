@@ -1,0 +1,21 @@
+{
+  "name": "gopher-menudle",
+  "description": "create Gopher menus with ease",
+  "version": "0.1.0",
+  "author": "Evan Hahn",
+  "license": "MIT",
+  "main": "menudle.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "keywords": [ "gopher", "protocol", "menu" ],
+  "dependencies": {
+    "lodash": "2.4.x",
+    "string": "1.7.x"
+  },
+  "devDependencies": {
+    "mocha": "1.15.x",
+    "chai": "1.8.x",
+    "sugar": "1.4.x"
+  }
+}
