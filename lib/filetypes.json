@@ -1,0 +1,18 @@
+{
+	".txt": "0",
+	".gif": "g",
+	".html": "h",
+	".htm": "h",
+	".php": "h",
+	".cgi": "h",
+	".wav": "s",
+	".mp3": "s",
+	".aac": "s",
+	".ogg": "s",
+	".ogg": "s",
+	".jpg": "I",
+	".jpeg": "I",
+	".png": "I",
+	".bmp": "I",
+	".svg": "I"
+}
