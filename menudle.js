@@ -1,11 +1,57 @@
 var _ = require('lodash');
 var S = require('string');
+var url = require('url');
 
 var ENDLINE = '\r\n';
+var FILETYPES = {
+	'.txt': '0',
+	'.gif': 'g',
+	'.html': 'h',
+	'.htm': 'h',
+	'.php': 'h',
+	'.cgi': 'h',
+	'.wav': 's',
+	'.mp3': 's',
+	'.aac': 's',
+	'.ogg': 's',
+	'.ogg': 's',
+	'.jpg': 'I',
+	'.jpeg': 'I',
+	'.png': 'I',
+	'.bmp': 'I',
+	'.svg': 'I',
+};
+
 var defaultOptions = {
 	tabSize: 4,
 	wrapAt: 72
 };
+
+function getExtension(path) {
+	return path.match(/\.\w+$/i);
+}
+
+function inferType(urlString) {
+
+	if (urlString.search(/^\w+:\/\//i) !== 0)
+		urlString = 'gopher://' + urlString;
+
+	var urlObject = url.parse(urlString);
+
+	if ((urlObject.protocol == 'http:') || (urlObject.protocol == 'https:'))
+		return 'h';
+
+	var typematch = urlObject.pathname.match(/^\/[0-9ghIsT]\/?/);
+	if (typematch)
+		return typematch[0][1];
+
+	var extension = getExtension(urlObject.pathname);
+	if (FILETYPES[extension])
+		return FILETYPES[extension];
+
+	return '1';
+
+}
 
 function textWrap(str, width) {
 	if (str.length > width) {
@@ -79,6 +125,43 @@ render.dblunderline = function(input, options) {
 	return render.text(input, options) +
 		ENDLINE +
 		render.text(S('=').repeat(input.length).s, options);
+}
+
+render.link = function(input, options) {
+
+	var split = input.split(/\s+/g, 2);
+
+	var type = split[0];
+	var urlString;
+	var text;
+	if (type.length == 1) {
+		urlString = split[1];
+		text = input.substr(split[0].length + split[1].length + 2);
+	} else {
+		urlString = type;
+		type = inferType(urlString);
+		text = input.substr(split[0].length + 1);
+	}
+	if (urlString.search(/^\w+:\/\//i) !== 0)
+		urlString = 'gopher://' + urlString;
+
+	var urlObject = url.parse(urlString);
+
+	var path = decodeURIComponent(urlObject.path);
+	if (urlObject.protocol !== 'gopher:') {
+		type = 'h';
+		path = 'URL:' + decodeURIComponent(urlString);
+	}
+	var hostname = urlObject.hostname;
+	var port = urlObject.port || 70;
+
+	return [
+		type + text,
+		path,
+		hostname,
+		port
+	].join('\t');
+
 }
 
 module.exports = {
