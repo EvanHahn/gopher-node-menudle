@@ -1,6 +1,5 @@
 var _ = require('lodash');
 var S = require('string');
-var url = require('url');
 
 var defaultOptions = {
 	tabSize: 4,
@@ -50,6 +49,4 @@ render.underline = require('./lib/renderers/underline');
 render.dblunderline = require('./lib/renderers/dblunderline');
 render.link = require('./lib/renderers/link');
 
-module.exports = {
-	render: render
-};
+module.exports = render;

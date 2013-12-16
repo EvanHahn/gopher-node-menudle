@@ -1,5 +1,4 @@
-var menudle = require('../');
-var render = menudle.render;
+var render = require('../');
 
 var S = require('string');
 require('chai').should();
