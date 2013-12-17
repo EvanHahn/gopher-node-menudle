@@ -40,7 +40,7 @@ function render(input, options) {
 
 	});
 
-	return result.join('\r\n');
+	return result.join('\r\n') + '\r\n';
 
 }
 

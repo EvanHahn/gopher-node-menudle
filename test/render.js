@@ -17,9 +17,9 @@ describe('menudle', function() {
 				lines[1].should.eql('iThis is a simple Gopher site.\tnull\t(FALSE)\t0');
 			});
 
-			it('should wrap long, solid with a specified wrap', function() {
+			it('should wrap long, solid lines with a specified wrap', function() {
 				var input = 'puddipuddipuddi';
-				var result = render(input, { wrapAt: 5 });
+				var result = render(input, { wrapAt: 5 }).trim();
 				var lines = S(result).lines();
 				lines.should.have.length(3);
 				lines[0].should.eql('ipuddi\tnull\t(FALSE)\t0');
@@ -30,7 +30,7 @@ describe('menudle', function() {
 
 			it('should wrap long word-filled lines with a specified wrap', function() {
 				var input = "This is Ron Burgundy, proudly reporting once again for Channel 4 News. Today's story is one of the more remarkable things ever to happen to San Diago or even the world.";
-				var result = render(input, { wrapAt: 30 });
+				var result = render(input, { wrapAt: 30 }).trim();
 				var lines = S(result).lines();
 				lines.should.have.length(6);
 				lines[0].should.eql('iThis is Ron Burgundy, proudly\tnull\t(FALSE)\t0');
@@ -43,7 +43,7 @@ describe('menudle', function() {
 
 			it('renders blank lines properly', function() {
 				var input = 'Hello world!\n\nThis is Gopher.';
-				var result = render(input);
+				var result = render(input).trim();
 				var lines = S(result).lines();
 				lines.should.have.length(3);
 				lines[0].should.eql('iHello world!\tnull\t(FALSE)\t0');
@@ -54,19 +54,19 @@ describe('menudle', function() {
 			it('renders lines that start with :', function() {
 				var input = '::Wow';
 				var result = render(input);
-				result.should.eql('i:Wow\tnull\t(FALSE)\t0');
+				result.should.eql('i:Wow\tnull\t(FALSE)\t0\r\n');
 			});
 
 			it('turns tabs into 4 spaces by default', function() {
 				var input = 'This is\tcool';
 				var result = render(input);
-				result.should.eql('iThis is    cool\tnull\t(FALSE)\t0');
+				result.should.eql('iThis is    cool\tnull\t(FALSE)\t0\r\n');
 			});
 
 			it('turns tabs into a specified number of spaces', function() {
 				var input = 'This is\tcool';
 				var result = render(input, { tabSize: 5 });
-				result.should.eql('iThis is     cool\tnull\t(FALSE)\t0');
+				result.should.eql('iThis is     cool\tnull\t(FALSE)\t0\r\n');
 			});
 
 		});
@@ -75,7 +75,7 @@ describe('menudle', function() {
 
 			it('should underline text', function() {
 				var input = ':underline San Diago';
-				var result = render(input);
+				var result = render(input).trim();
 				var lines = S(result).lines();
 				lines.should.have.length(2);
 				lines[0].should.eql('iSan Diago\tnull\t(FALSE)\t0');
@@ -84,7 +84,7 @@ describe('menudle', function() {
 
 			it('should double-underline text', function() {
 				var input = ':dblunderline San Diago';
-				var result = render(input);
+				var result = render(input).trim();
 				var lines = S(result).lines();
 				lines.should.have.length(2);
 				lines[0].should.eql('iSan Diago\tnull\t(FALSE)\t0');
@@ -97,7 +97,7 @@ describe('menudle', function() {
 
 			it('should link to external sites given all info', function() {
 				var input = ':link 0 gopherpedia.com:70/Bread Read about bread!';
-				var result = render(input);
+				var result = render(input).trim();
 				var split = result.split('\t');
 				split[0].should.eql('0Read about bread!');
 				split[1].should.eql('/Bread');
@@ -107,7 +107,7 @@ describe('menudle', function() {
 
 			it('should default to port 70', function() {
 				var input = ':link 0 gopherpedia.com/Bread Read about bread!';
-				var result = render(input);
+				var result = render(input).trim();
 				var split = result.split('\t');
 				split[0].should.eql('0Read about bread!');
 				split[1].should.eql('/Bread');
@@ -131,13 +131,13 @@ describe('menudle', function() {
 			});
 
 			it('parses HTTP links properly', function() {
-				render(':link h http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t70');
-				render(':link http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t70');
+				render(':link h http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t70\r\n');
+				render(':link http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t70\r\n');
 			});
 
 			it('parses HTTPS links properly', function() {
-				render(':link h https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t70');
-				render(':link https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t70');
+				render(':link h https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t70\r\n');
+				render(':link https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t70\r\n');
 			});
 
 		});
