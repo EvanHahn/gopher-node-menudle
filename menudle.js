@@ -30,7 +30,7 @@ function render(input, options) {
 		} else {
 
 			var command = line.substr(1).split(/\s+/, 1)[0].toLowerCase();
-			input = input.substr(command.length + 2);
+			input = line.substr(command.length + 2);
 			if (!render[command])
 				result.push(render.text('Unknown command ' + command, options));
 			else

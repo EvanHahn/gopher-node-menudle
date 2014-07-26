@@ -140,6 +140,16 @@ describe('menudle', function() {
 				render(':link https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t70\r\n');
 			});
 
+			it('should properly handle multiline input containing a link', function() {
+				var text = 'Welcome to Breadpedia\n';
+				// same link format as 'should link to external sites given all info' test
+				var link = ':link 0 gopherpedia.com:70/Bread Read about bread!';
+				var result = render(text + link).trim();
+				var lines = result.split('\r\n');
+				lines[0].should.eql('iWelcome to Breadpedia\tnull\t(FALSE)\t0');
+				lines[1].should.eql('0Read about bread!\t/Bread\tgopherpedia.com\t70');
+			});
+
 		});
 
 	});
