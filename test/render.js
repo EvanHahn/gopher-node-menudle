@@ -115,6 +115,26 @@ describe('menudle', function() {
 				split[3].should.eql('70');
 			});
 
+			it('should default http to port 80', function() {
+				var input = ':link h http://gopherpedia.com/Bread Read about bread!';
+				var result = render(input).trim();
+				var split = result.split('\t');
+				split[0].should.eql('hRead about bread!');
+				split[1].should.eql('URL:http://gopherpedia.com/Bread');
+				split[2].should.eql('gopherpedia.com');
+				split[3].should.eql('80');
+			});
+
+			it('should default https to port 443', function() {
+				var input = ':link h https://gopherpedia.com/Bread Read about bread!';
+				var result = render(input).trim();
+				var split = result.split('\t');
+				split[0].should.eql('hRead about bread!');
+				split[1].should.eql('URL:https://gopherpedia.com/Bread');
+				split[2].should.eql('gopherpedia.com');
+				split[3].should.eql('443');
+			});
+
 			it("should guess about the link's type", function() {
 				render(':link x.com x')[0].should.eql('1');
 				render(':link x.com/ x')[0].should.eql('1');
@@ -131,13 +151,13 @@ describe('menudle', function() {
 			});
 
 			it('parses HTTP links properly', function() {
-				render(':link h http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t70\r\n');
-				render(':link http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t70\r\n');
+				render(':link h http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t80\r\n');
+				render(':link http://x.com x').should.eql('hx\tURL:http://x.com\tx.com\t80\r\n');
 			});
 
 			it('parses HTTPS links properly', function() {
-				render(':link h https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t70\r\n');
-				render(':link https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t70\r\n');
+				render(':link h https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t443\r\n');
+				render(':link https://x.com x').should.eql('hx\tURL:https://x.com\tx.com\t443\r\n');
 			});
 
 			it('should properly handle multiline input containing a link', function() {
