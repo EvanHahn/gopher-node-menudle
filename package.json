@@ -3,6 +3,9 @@
   "description": "create Gopher menus with ease",
   "version": "0.2.0",
   "author": "Evan Hahn",
+  "contributors": [
+    "Jared Hirsch <ohai@6a68.net> (http://6a68.net)"
+  ],
   "license": "MIT",
   "main": "menudle.js",
   "scripts": {
